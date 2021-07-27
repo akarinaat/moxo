@@ -5,7 +5,7 @@ module.exports = app
 
 
 app.get('/', (req,res) => {
-    res.send('HOME');
+    res.render('index');
     
 })
 
