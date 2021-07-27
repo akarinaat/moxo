@@ -13,7 +13,7 @@ app.get('/accesorios', (req,res) => {
     res.send('ACCESORIOS');
 })
 
-app.get('/JUGUETES', (req,res) => {
+app.get('/juguetes', (req,res) => {
     res.send('JUGUETES');
 })
 
