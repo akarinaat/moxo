@@ -40,3 +40,7 @@ app.get('/login', (req,res) => {
 app.get('/registro', (req,res) => {
     res.send('REGISTRO');
 })
+
+app.get('/myAccount', (req,res) => {
+    res.render('myAccount')
+})
