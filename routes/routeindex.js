@@ -58,4 +58,10 @@ app.get('/registro', (req,res) => {
     res.send('REGISTRO');
 })
 
+
+app.get('/myAccount', (req,res) => {
+    res.render('myAccount')
+})
+
 module.exports = app
+
