@@ -4,4 +4,8 @@
 .div_de_divs{
    
     display: flex;
+    justify-content: space-between;
+    max-width: 80%;
+    margin: auto;
+    margin-top: 10%;
 }
