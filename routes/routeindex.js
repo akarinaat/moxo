@@ -59,8 +59,19 @@ app.get('/registro', (req,res) => {
 })
 
 
-app.get('/myAccount', (req,res) => {
-    res.render('myAccount')
+app.get('/myAccount/:id',   async(req,res) =>{
+
+    var id = req.params.id;
+    var customer = await Customer.findById(id);
+    res.render('myAccount',{customer})
+})
+
+app.post('/updateAccount/:id',   async(req,res) =>{
+
+    //req.body
+    var id = req.params.id;
+    await Customer.updateOne({_id: id}, req.body)
+    res.redirect('/')
 })
 
 module.exports = app
