@@ -14,15 +14,15 @@ app.get('/accesorios', (req,res) => {
 })
 
 app.get('/juguetes', (req,res) => {
-    res.send('JUGUETES');
+    res.render('juguetes');
 })
 
 app.get('/muebles', (req,res) => {
-    res.send('MUEBLES');
+    res.render('muebles');
 })
 
 app.get('/comida', (req,res) => {
-    res.send('COMIDA');
+    res.render('comida');
 })
 
 app.get('/carrito', (req,res) => {
