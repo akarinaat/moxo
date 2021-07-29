@@ -5,6 +5,7 @@ const Customer = require("../models/customers");
 const Product = require("../models/product");
 const verify = require("../middleware/verifyAccess");
 var jwt = require("jsonwebtoken");
+const _ProductInCart = require('../models/carrito');
 
 app.get('/login', function(req,res) {
 	res.render('login');
@@ -54,8 +55,12 @@ app.get('/', verify,  function(req,res) {
     res.render('index');
 })
 
-app.get('/accesorios', (req,res) => {
-    res.send('ACCESORIOS');
+app.get('/cart', async (req,res) =>{
+
+// var pinc = new _ProductInCart(req.body);
+// await pinc.save();
+// res.redirect('/cart');
+	
 })
 
 app.get('/juguetes', (req,res) => {
