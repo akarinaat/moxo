@@ -1,3 +1,4 @@
+var jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
 	var token = req.cookies.token || '';
@@ -6,7 +7,18 @@ function verifyToken(req, res, next) {
 		return res.redirect("/login");
 	}
 	else {
-		next();
+		jwt.verify(token, "moxoSecretSign", function(err, datos) { // La firma (abcd1234) tiene que ser la misma que en routeindex.js
+			if (err) {
+				console.log(err);
+				return res.redirect("/login");
+			}
+			else {
+				req.userId = datos.id; // datos es el Token
+				req.permission = datos.permission;
+				
+				next();
+			}
+		}); 
 	}
 }
 
