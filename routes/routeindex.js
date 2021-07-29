@@ -43,11 +43,11 @@ app.get('/comida', (req,res) => {
 })
 
 app.get('/carrito', (req,res) => {
-    res.send('CARRITO');
+    res.render('cart');
 })
 
 app.get('/pago', (req,res) => {
-    res.send('PAGO');
+    res.render('checkout');
 })
 
 app.get('/login', (req,res) => {
