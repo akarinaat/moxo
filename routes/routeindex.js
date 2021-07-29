@@ -3,10 +3,39 @@ const app = express();
 const Carrito = require("../models/carrito");
 const Customer = require("../models/customers");
 const Product = require("../models/product");
-//const verify = require("../middleware/verifyAccess");
+const verify = require("../middleware/verifyAccess");
+var jwt = require("jsonwebtoken");
 
 app.get('/login', function(req,res) {
 	res.render('login');
+});
+
+app.post('/login', async function(req,res) {
+	var email = req.body.email;
+	var password = req.body.password;
+
+	var customer = await Customer.findOne({email:email});
+	
+	if (!customer) { // Si no existe el usuario
+		return res.status(404).send("El usuario no existe. Regrese a Login e intente de nuevo");;
+	}
+	else { // Si el usuario sí existe, validar contraseña
+		var valid = await customer.validatePassword(password);
+
+		if (valid) { // Si la contraseña es válida, crear un token
+			var token = jwt.sign({id: customer.email, permission: true}, "moxoSecretSign", {expiresIn: "1h"});
+			console.log(token);
+
+			// Guardamos el Token en las Cookies del usuario y redireccionamos a Home
+			res.cookie("token", token, {httpOnly: true});
+			res.redirect("/");
+		}
+		else { // Si la contraseña no es válida
+			console.log("Password is not valid");
+			res.redirect("/login");
+		}
+	}
+	res.send("Ok");
 });
 
 app.get('/register', function(req,res) {
@@ -21,9 +50,8 @@ app.post('/addCustomer', async function(req,res) {
 	res.redirect('/login');
 });
 
-app.get('/', (req,res) => {
+app.get('/', verify,  function(req,res) {
     res.render('index');
-    
 })
 
 app.get('/accesorios', (req,res) => {
@@ -72,6 +100,11 @@ app.post('/updateAccount/:id',   async(req,res) =>{
     var id = req.params.id;
     await Customer.updateOne({_id: id}, req.body)
     res.redirect('/')
+})
+
+app.get('/logoff', async (req,res) => {
+	res.clearCookie("token");
+	res.redirect('/');
 })
 
 module.exports = app
