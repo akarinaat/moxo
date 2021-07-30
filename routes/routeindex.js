@@ -1,11 +1,14 @@
-const express = require('express');
-const app = express();
+/*const express = require('express');
+const app = express();*/
+const { Router } = require('express');
+const app = Router();
 const Carrito = require("../models/carrito");
 const Customer = require("../models/customers");
 const Product = require("../models/product");
 const verify = require("../middleware/verifyAccess");
 var jwt = require("jsonwebtoken");
 const _ProductInCart = require('../models/carrito');
+var flash = require("connect-flash");
 
 app.get('/login', function(req,res) {
 	res.render('login');
@@ -18,7 +21,9 @@ app.post('/login', async function(req,res) {
 	var customer = await Customer.findOne({email:email});
 	
 	if (!customer) { // Si no existe el usuario
-		return res.status(404).send("El usuario no existe. Regrese a Login e intente de nuevo");;
+		req.flash('message', 'Invalid User - Unregistered mail');
+		res.redirect("/login");
+		//return res.status(404).send("El usuario no existe. Regrese a Login e intente de nuevo");;
 	}
 	else { // Si el usuario sí existe, validar contraseña
 		var valid = await customer.validatePassword(password);
@@ -33,10 +38,10 @@ app.post('/login', async function(req,res) {
 		}
 		else { // Si la contraseña no es válida
 			console.log("Password is not valid");
+			req.flash('message', 'Incorrect Password');
 			res.redirect("/login");
 		}
 	}
-	res.send("Ok");
 });
 
 app.get('/register', function(req,res) {
@@ -113,4 +118,3 @@ app.get('/logoff', async (req,res) => {
 })
 
 module.exports = app
-
