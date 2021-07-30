@@ -6,6 +6,7 @@ const Product = require("../models/product");
 const verify = require("../middleware/verifyAccess");
 var jwt = require("jsonwebtoken");
 const _ProductInCart = require('../models/carrito');
+var id ="";
 
 app.get('/login', function(req,res) {
 	res.render('login');
@@ -22,10 +23,13 @@ app.post('/login', async function(req,res) {
 	}
 	else { // Si el usuario sí existe, validar contraseña
 		var valid = await customer.validatePassword(password);
+		
 
 		if (valid) { // Si la contraseña es válida, crear un token
 			var token = jwt.sign({id: customer.email, permission: true}, "moxoSecretSign", {expiresIn: "1h"});
 			console.log(token);
+			id=customer._id
+			console.log(id);
 
 			// Guardamos el Token en las Cookies del usuario y redireccionamos a Home
 			res.cookie("token", token, {httpOnly: true});
@@ -75,9 +79,20 @@ app.get('/comida', (req,res) => {
     res.render('comida');
 })
 
-app.get('/carrito', (req,res) => {
-    res.render('cart');
+app.get('/carrito', async(req,res) => {
+	var carrito = await Carrito.find({'idCustomer' : id});
+	console.log(id)
+	console.log(carrito)
+    res.render('cart',{carrito})
 })
+
+// Ruta que nos permita eliminar items con el método "deleteOne"
+app.get('/deleteItem/:idProduct',  async (req,res) =>{
+
+	var idProduct = req.params.idProduct;
+	await Carrito.remove({idCustomer: id, idProduct: idProduct});
+	res.render('cart',{carrito})
+  })
 
 app.get('/pago', (req,res) => {
     res.render('checkout');
@@ -91,10 +106,8 @@ app.get('/registro', (req,res) => {
     res.send('REGISTRO');
 })
 
+app.get('/myAccount',   async(req,res) =>{
 
-app.get('/myAccount/:id',   async(req,res) =>{
-
-    var id = req.params.id;
     var customer = await Customer.findById(id);
     res.render('myAccount',{customer})
 })
@@ -104,7 +117,7 @@ app.post('/updateAccount/:id',   async(req,res) =>{
     //req.body
     var id = req.params.id;
     await Customer.updateOne({_id: id}, req.body)
-    res.redirect('/')
+    res.redirect('/myAccount')
 })
 
 app.get('/logoff', async (req,res) => {

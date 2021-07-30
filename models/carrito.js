@@ -2,13 +2,12 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 
-var ProductInCartScheme = Schema ({
+var CarritoInCartScheme = Schema ({
     //me causa ruido
     idCustomer: String,
     idProduct: String,
-    cantidad: Number
     
 })
 
 
-module.exports = mongoose.model('productsincart', ProductInCartScheme);
+module.exports = mongoose.model('carrito', CarritoInCartScheme);
