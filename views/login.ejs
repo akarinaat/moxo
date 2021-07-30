@@ -7,6 +7,7 @@
     <meta name="author" content="">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
+	<link rel="icon" type="image/png" href="https://cdn.pixabay.com/photo/2016/06/15/17/46/feet-1459485_960_720.png" sizes="32x32">
     <title>Login to MOXO</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
@@ -28,6 +29,9 @@
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Login to your account</button>
+      <% if (messages.length>0 ) {  %>
+		<p class="alert alert-warning"><%= messages %></p>
+	  <% }  %>
       <br>
       <p class="mt-5 mb-3 text-muted">Don't you have an account? <u><a href='/register'>Register</a></u></p>
       <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
